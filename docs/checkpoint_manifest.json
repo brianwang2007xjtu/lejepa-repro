@@ -1,0 +1,50 @@
+{
+  "expB_in100_vits16_128": {
+    "file": "expB_in100_vits16_128.pt",
+    "size_mb": 108.7,
+    "sha256_16": "23eea643e6aebc0c",
+    "epochs": 40
+  },
+  "expC_in100_vits16_8view": {
+    "file": "expC_in100_vits16_8view.pt",
+    "size_mb": 113.0,
+    "sha256_16": "c29324c7698b68ee",
+    "epochs": 50
+  },
+  "abl_base_lamb0.02": {
+    "file": "abl_base_lamb0.02.pt",
+    "size_mb": 108.7,
+    "sha256_16": "b4f3d5fb06946a28",
+    "epochs": 12
+  },
+  "abl_lamb0.005": {
+    "file": "abl_lamb0.005.pt",
+    "size_mb": 108.7,
+    "sha256_16": "1ca3f0d1888e5dda",
+    "epochs": 12
+  },
+  "abl_lamb0.05": {
+    "file": "abl_lamb0.05.pt",
+    "size_mb": 108.7,
+    "sha256_16": "04a3d8f2fde269c6",
+    "epochs": 12
+  },
+  "abl_lamb0.2": {
+    "file": "abl_lamb0.2.pt",
+    "size_mb": 108.7,
+    "sha256_16": "87894e01b4da5c4e",
+    "epochs": 12
+  },
+  "abl_slices64": {
+    "file": "abl_slices64.pt",
+    "size_mb": 108.7,
+    "sha256_16": "999fc0f079d0e38d",
+    "epochs": 12
+  },
+  "abl_views2": {
+    "file": "abl_views2.pt",
+    "size_mb": 108.7,
+    "sha256_16": "11a203469377cfa1",
+    "epochs": 12
+  }
+}

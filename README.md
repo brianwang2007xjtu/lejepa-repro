@@ -130,6 +130,10 @@ baseline λ=.02 **30.9** · λ=.05 30.4 · M=64 28.6 · λ=.005 27.2 · **λ=.2 
 SIGReg converged to **1.54** against a theoretical floor of **1.0594**; the projector-space
 effective rank rose 8.3 → 15.8 (of 16) with **no collapse** in any correctly-configured run.
 
+Pretrained weights (8 runs, ~109 MB each, slimmed to weights + config) are released
+separately — see [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md) and
+[`docs/checkpoint_manifest.json`](docs/checkpoint_manifest.json) for SHA-256 checksums.
+
 See [`REPRODUCTION_REPORT.md`](REPRODUCTION_REPORT.md) for the full results, the comparison
 table with the paper, the failure analyses, and an explicit three-tier classification
 (full / approximate / algorithmic-only). **This is an approximate reproduction: ImageNet-1K

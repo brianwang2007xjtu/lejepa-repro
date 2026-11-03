@@ -329,6 +329,6 @@ EPOCHS=12 bash scripts/run_ablations.sh
 | 消融设计与结果 | `docs/ABLATIONS.md` |
 | 单元测试 | `tests/`（77 passed, 1 skipped） |
 | 训练日志与曲线 | `results/*_curves.png`, `results/*_summary.md` |
-| 模型权重 | 远端 `checkpoints/`（Exp B/C + 6 组消融） |
+| 模型权重 | GitHub Release（8 个文件，~109 MB/个，含 SHA-256 校验；说明见 [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)） |
 | 复现结果对比表 | 本报告 §8 |
 | 失败实验分析 | 本报告 §7 |
