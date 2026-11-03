@@ -1,0 +1,74 @@
+# Experiment B — validated multi-view training on a real dataset, MINIMAL-scale recipe.
+#
+# Follows MINIMAL.md's recipe (single augmentation stack for all views => Vg = V, lambda=0.02,
+# projector_dim=16, lr=2e-3, ViT-S) but on ImageNet-100 instead of ImageNette, because the
+# ImageNette archive is not reachable from this host and ImageNet-1K train cannot be extracted
+# into 50 GB.  Two further deviations, both forced by a 24 GB GPU:
+#   * patch 16 instead of patch 8 at 128 px (256 -> 64 tokens per view),
+#   * therefore batch 256 x 4 views fits.
+# Reported as a validation/medium-scale run, NOT as the 90.7 % ImageNette reproduction.
+run_name: in100_vits16_128
+output_dir: checkpoints
+seed: 0
+precision: bf16
+log_every: 20
+save_every: 25
+tensorboard: true
+
+model:
+  model_name: vit_small_patch16_224
+  embedding_dim: 512
+  img_size: 128
+  drop_path_rate: 0.1
+  dynamic_img_size: true
+
+projector:
+  embedding_dim: 512
+  projector_dim: 16
+  hidden_dims: [2048, 2048]
+  hidden_norm: bn
+  final_norm: none
+  final_act: none
+
+data:
+  name: imagenet100
+  root: /root/autodl-tmp/data/imagenet100
+  split: train
+  num_classes: 100
+  n_global_views: 4
+  n_local_views: 0
+  global_resolution: 128
+  local_resolution: 128
+  global_scale: [0.08, 1.0]
+  local_scale: [0.08, 1.0]
+  recipe: minimal
+
+batch_size: 256
+epochs: 200
+num_workers: 16
+warmup_epochs: 1
+lambd: 0.02
+
+optim:
+  lr: 0.002
+  weight_decay: 0.05
+  min_lr_ratio: 0.5
+  start_factor: 0.01
+  betas: [0.9, 0.999]
+
+sigreg:
+  num_slices: 256
+  t_max: 3.0
+  n_points: 17
+  resample: step
+  seed: 0
+
+online_probe:
+  enabled: true
+  lr: 0.001
+  weight_decay: 1.0e-7
+
+eval:
+  enabled: false
+  every: 25
+  batch_size: 256

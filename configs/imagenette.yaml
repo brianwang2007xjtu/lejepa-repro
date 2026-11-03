@@ -1,0 +1,69 @@
+# Experiment B — the reference-matched run.
+#
+# Reproduces the recipe of the official MINIMAL.md (ViT-S/8 + ImageNette), whose published
+# result is **90.7 % online-probe accuracy** in ~2 h on a single GPU.  Every value below is
+# taken from MINIMAL.md except where noted.
+run_name: imagenette_vits8
+output_dir: checkpoints
+seed: 0
+precision: bf16
+log_every: 20
+save_every: 25
+tensorboard: true
+
+model:
+  model_name: vit_small_patch8_224
+  embedding_dim: 512            # MINIMAL.md: num_classes=512 (embedding width)
+  img_size: 128                 # MINIMAL.md: img_size=128
+  drop_path_rate: 0.1           # MINIMAL.md: drop_path_rate=0.1
+
+projector:
+  embedding_dim: 512
+  projector_dim: 16             # MINIMAL.md: +proj_dim=16
+  hidden_dims: [2048, 2048]     # torchvision MLP(512, [2048,2048,proj_dim])
+  hidden_norm: bn
+  final_norm: none
+  final_act: none               # torchvision.ops.MLP applies norm+act after every layer
+
+data:
+  name: imagenette
+  root: /root/autodl-tmp/data/imagenette2-160
+  split: train
+  num_classes: 10
+  n_global_views: 4             # MINIMAL.md: +V=4 (all views share one pipeline => Vg = V)
+  n_local_views: 0
+  global_resolution: 128
+  local_resolution: 128
+  global_scale: [0.08, 1.0]     # MINIMAL.md: RandomResizedCrop(128, scale=(0.08, 1.0))
+  local_scale: [0.08, 1.0]
+  recipe: minimal
+
+batch_size: 256
+epochs: 800
+num_workers: 12
+warmup_epochs: 1
+lambd: 0.02                     # MINIMAL.md: +lamb=0.02
+
+optim:
+  lr: 0.002                     # MINIMAL.md: +lr=2e-3
+  weight_decay: 0.05            # MINIMAL.md: 5e-2 on the encoder
+  min_lr_ratio: 0.5             # MINIMAL.md: CosineAnnealingLR(eta_min=1e-3) with peak 2e-3
+  start_factor: 0.01            # MINIMAL.md: LinearLR(start_factor=0.01)
+  betas: [0.9, 0.999]
+
+sigreg:
+  num_slices: 256               # MINIMAL.md: torch.randn(D, 256)
+  t_max: 3.0                    # MINIMAL.md: linspace(0, 3, 17)
+  n_points: 17
+  resample: step
+  seed: 0
+
+online_probe:
+  enabled: true                 # this is the metric MINIMAL.md reports (90.7 %)
+  lr: 0.001
+  weight_decay: 1.0e-7
+
+eval:
+  enabled: true
+  every: 1
+  batch_size: 256

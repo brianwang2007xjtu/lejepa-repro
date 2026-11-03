@@ -1,0 +1,78 @@
+{
+  "run_name": "expB_in100_vits16_128",
+  "output_dir": "checkpoints",
+  "seed": 0,
+  "precision": "bf16",
+  "log_every": 20,
+  "save_every": 10,
+  "tensorboard": true,
+  "model": {
+    "model_name": "vit_small_patch16_224",
+    "embedding_dim": 512,
+    "img_size": 128,
+    "drop_path_rate": 0.1,
+    "dynamic_img_size": true
+  },
+  "projector": {
+    "embedding_dim": 512,
+    "projector_dim": 16,
+    "hidden_dims": [
+      2048,
+      2048
+    ],
+    "hidden_norm": "bn",
+    "final_norm": "none",
+    "final_act": "none"
+  },
+  "data": {
+    "name": "imagenet100",
+    "root": "/root/autodl-tmp/data/imagenet100",
+    "split": "train",
+    "num_classes": 100,
+    "n_global_views": 4,
+    "n_local_views": 0,
+    "global_resolution": 128,
+    "local_resolution": 128,
+    "global_scale": [
+      0.08,
+      1.0
+    ],
+    "local_scale": [
+      0.08,
+      1.0
+    ],
+    "recipe": "minimal"
+  },
+  "batch_size": 256,
+  "epochs": 40,
+  "num_workers": 16,
+  "warmup_epochs": 1,
+  "lambd": 0.02,
+  "optim": {
+    "lr": 0.002,
+    "weight_decay": 0.05,
+    "min_lr_ratio": 0.5,
+    "start_factor": 0.01,
+    "betas": [
+      0.9,
+      0.999
+    ]
+  },
+  "sigreg": {
+    "num_slices": 256,
+    "t_max": 3.0,
+    "n_points": 17,
+    "resample": "step",
+    "seed": 0
+  },
+  "online_probe": {
+    "enabled": true,
+    "lr": 0.001,
+    "weight_decay": 1e-07
+  },
+  "eval": {
+    "enabled": true,
+    "every": 5,
+    "batch_size": 256
+  }
+}

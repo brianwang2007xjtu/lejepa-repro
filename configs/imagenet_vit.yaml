@@ -1,0 +1,72 @@
+# Experiment C (paper scale) — ImageNet-1K, ViT-L/14, the setting of Table 1 and §6.4.
+#
+# !! THIS CONFIG CANNOT BE RUN ON THE AVAILABLE MACHINE !!
+#    * ImageNet-1K needs ~150 GB to extract; only 50 GB is writable.
+#    * batch 512 x 8 views x 238 px ViT-L in bf16 needs ~60 GB of activations;
+#      one RTX 4090 has 24 GB.
+# It is kept in the repository because it is the exact paper configuration and documents
+# what a faithful reproduction would require (>= 8 x A100-80GB).
+run_name: in1k_vitl14
+output_dir: checkpoints
+seed: 0
+precision: bf16
+log_every: 20
+save_every: 10
+tensorboard: true
+
+model:
+  model_name: vit_large_patch14_224
+  embedding_dim: 512
+  img_size: 238                 # launch configs: resolution=238 (= 17 x 14)
+  drop_path_rate: 0.1           # launch configs: drop_path_rate=0.1
+
+projector:
+  embedding_dim: 512
+  projector_dim: 512
+  hidden_dims: [2048, 2048]
+  hidden_norm: bn
+  final_norm: none
+  final_act: none
+
+data:
+  name: imagenet
+  root: /root/autodl-tmp/data/imagenet
+  split: train
+  num_classes: 1000
+  n_global_views: 2
+  n_local_views: 6
+  global_resolution: 238
+  local_resolution: 98          # launch configs: local_resolution=98 (= 7 x 14)
+  global_scale: [0.3, 1.0]
+  local_scale: [0.05, 0.3]
+  recipe: lejepa
+
+batch_size: 512
+epochs: 100
+num_workers: 32
+warmup_epochs: 5
+lambd: 0.05
+
+optim:
+  lr: 0.0005
+  weight_decay: 0.05
+  min_lr_ratio: 0.001
+  start_factor: 0.01
+  betas: [0.9, 0.999]
+
+sigreg:
+  num_slices: 1024
+  t_max: 5.0
+  n_points: 17
+  resample: step
+  seed: 0
+
+online_probe:
+  enabled: true
+  lr: 0.001
+  weight_decay: 1.0e-7
+
+eval:
+  enabled: false
+  every: 10
+  batch_size: 256

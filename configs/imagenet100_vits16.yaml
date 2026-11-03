@@ -1,0 +1,71 @@
+# Experiment C — scale-limited approximate reproduction on ImageNet-100.
+#
+# The paper's ImageNet-1K recipe (ViT-L/14, res 238/98, batch 512, 100 ep, 8 views) does not
+# fit on one 24 GB RTX 4090 and ImageNet-1K cannot be extracted into the 50 GB writable
+# volume.  This config keeps every hyper-parameter of §6.1 except the model size (ViT-S/16
+# instead of ViT-L/14), the batch size (128 instead of 512) and the dataset (IN-100 instead of
+# IN-1K).  It is therefore an APPROXIMATE reproduction, not a reproduction of Table 1.
+run_name: in100_vits16
+output_dir: checkpoints
+seed: 0
+precision: bf16
+log_every: 20
+save_every: 10
+tensorboard: true
+
+model:
+  model_name: vit_small_patch16_224
+  embedding_dim: 512
+  img_size: 224
+  drop_path_rate: 0.1
+
+projector:
+  embedding_dim: 512
+  projector_dim: 512
+  hidden_dims: [2048, 2048]
+  hidden_norm: bn
+  final_norm: none
+  final_act: none
+
+data:
+  name: imagenet100
+  root: /root/autodl-tmp/data/imagenet100
+  split: train
+  num_classes: 100
+  n_global_views: 2             # paper §6.1: Vg=2
+  n_local_views: 6              # paper §6.1: Vl=6  (V=8)
+  global_resolution: 224
+  local_resolution: 96
+  global_scale: [0.3, 1.0]      # README
+  local_scale: [0.05, 0.3]      # README
+  recipe: lejepa
+
+batch_size: 128
+epochs: 100
+num_workers: 16
+warmup_epochs: 5
+lambd: 0.05
+
+optim:
+  lr: 0.0005
+  weight_decay: 0.05
+  min_lr_ratio: 0.001           # README: final lr = initial / 1000
+  start_factor: 0.01
+  betas: [0.9, 0.999]
+
+sigreg:
+  num_slices: 1024              # paper §6.1 recommendation
+  t_max: 5.0                    # paper Table 1a recommendation
+  n_points: 17
+  resample: step
+  seed: 0
+
+online_probe:
+  enabled: true
+  lr: 0.001
+  weight_decay: 1.0e-7
+
+eval:
+  enabled: false                # use scripts/evaluate.py for the frozen linear probe
+  every: 25
+  batch_size: 256

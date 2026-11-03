@@ -1,0 +1,64 @@
+# Experiment A — pipeline debug on synthetic data (no dataset needed).
+# Verifies forward/backward/step/checkpoint/resume.  Not a scientific run.
+run_name: debug
+output_dir: checkpoints
+seed: 0
+precision: bf16
+log_every: 1
+save_every: 1
+tensorboard: true
+
+model:
+  model_name: vit_small_patch16_224
+  embedding_dim: 128
+  img_size: 64
+  drop_path_rate: 0.0
+
+projector:
+  embedding_dim: 128
+  projector_dim: 32
+  hidden_dims: [256]
+  hidden_norm: bn
+  final_norm: none
+  final_act: none
+
+data:
+  name: synthetic
+  length: 128
+  num_classes: 10
+  resolution: 64
+  n_global_views: 2
+  n_local_views: 2
+  global_resolution: 64
+  local_resolution: 32
+  global_scale: [0.3, 1.0]
+  local_scale: [0.05, 0.3]
+  recipe: lejepa
+
+batch_size: 8
+epochs: 2
+num_workers: 0
+warmup_epochs: 1
+lambd: 0.05
+
+optim:
+  lr: 0.0005
+  weight_decay: 0.05
+  min_lr_ratio: 0.001
+  start_factor: 0.01
+  betas: [0.9, 0.999]
+
+sigreg:
+  num_slices: 64
+  t_max: 5.0
+  n_points: 17
+  resample: step
+  seed: 0
+
+online_probe:
+  enabled: false
+  lr: 0.001
+  weight_decay: 1.0e-7
+
+eval:
+  enabled: false

@@ -1,0 +1,6 @@
+{"name": "abl_base_lamb0.02", "overrides": "lambd=0.02", "epochs": null, "linear_top1": 30.919999999999998, "linear_top5": 60.46, "knn_acc": 27.08, "feat_dim": 768}
+{"name": "abl_lamb0.005", "overrides": "lambd=0.005", "epochs": null, "linear_top1": 27.24, "linear_top5": 54.459999999999994, "knn_acc": 21.02, "feat_dim": 768}
+{"name": "abl_lamb0.05", "overrides": "lambd=0.05", "epochs": null, "linear_top1": 30.380000000000003, "linear_top5": 59.28, "knn_acc": 26.200000000000003, "feat_dim": 768}
+{"name": "abl_lamb0.2", "overrides": "lambd=0.2", "epochs": null, "linear_top1": 4.88, "linear_top5": 15.9, "knn_acc": 3.36, "feat_dim": 768}
+{"name": "abl_slices64", "overrides": "sigreg.num_slices=64", "epochs": null, "linear_top1": 28.64, "linear_top5": 56.49999999999999, "knn_acc": 24.68, "feat_dim": 768}
+{"name": "abl_views2", "overrides": "data.n_global_views=2 projector.projector_dim=16", "epochs": null, "linear_top1": 3.2399999999999998, "linear_top5": 11.600000000000001, "knn_acc": 2.1999999999999997, "feat_dim": 768}

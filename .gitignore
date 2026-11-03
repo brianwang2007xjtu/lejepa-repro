@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+.venv/
+venv/
+
+# trained weights are large; keep them out of git (they are reproducible from the configs)
+checkpoints/*
+!checkpoints/.gitkeep
+*.pt
+*.pth
+*.safetensors
+
+# local datasets
+data/
+logs/*
+!logs/.gitkeep
+
+# NOTE: results/ IS committed on purpose -- metrics.jsonl, eval JSONs and the figures are
+# the evidence behind REPRODUCTION_REPORT.md.

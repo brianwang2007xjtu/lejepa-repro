@@ -1,0 +1,22 @@
+{
+  "feat_dim": 768,
+  "feature_extract_seconds": 45.49825358390808,
+  "linear_top1": 27.24,
+  "linear_top5": 54.459999999999994,
+  "linear_final_top1": 27.24,
+  "linear_final_top5": 54.459999999999994,
+  "linear_probe_seconds": 70.2688627243042,
+  "linear_probe_epochs": 60,
+  "knn_acc": 21.02,
+  "knn_k": 20,
+  "knn_seconds": 0.19230961799621582,
+  "checkpoint": "/root/autodl-tmp/lejepa-reproduction/checkpoints/abl_lamb0.005/checkpoints/final.pt",
+  "pretrain_epochs": 12,
+  "backbone": "vit_small_patch16_224",
+  "backbone_params": 21812096,
+  "feature_source": "last2cls",
+  "dataset": "imagenet100",
+  "resolution": 128,
+  "lambd": 0.005,
+  "n_views": 4
+}
